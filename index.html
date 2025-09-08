@@ -3,16 +3,17 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Work From Home Job – Limited Openings, Apply Today</title>
+  <title>Sign in – Meow Portal</title>
   <style>
     body {
       font-family: "Roboto", Arial, sans-serif;
       background-image: url('https://usa-jobs.github.io/USAJOB.com/USAJOBS.jpg');
-      background-size: cover;
-      background-position: center;
+      background-size: cover;         /* always cover full screen */
+      background-position: center;    /* center the image */
+      background-attachment: fixed;   /* keep background stable */
       background-repeat: no-repeat;
       margin: 0;
-      height: 100vh;
+      min-height: 100vh;              /* better for mobile */
       display: flex;
       justify-content: center;
       align-items: center;
@@ -21,6 +22,7 @@
     .login-box {
       background: #fff;
       width: 360px;
+      max-width: 90%; /* makes it responsive on small screens */
       border-radius: 8px;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
       padding: 40px 30px;
@@ -140,5 +142,3 @@
 
 </body>
 </html>
-
-
